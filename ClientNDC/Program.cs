@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using HititNDCv201;
+using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -78,7 +79,7 @@ using (new OperationContextScope(client.InnerChannel))
             foreach (var offer in offers)
             {
                 var total = offer.TotalPrice.TotalAmount;
-                Console.WriteLine(total.Value + " " + total.CurCode + ": " + offer.OfferID.Substring(0, 20) + "... (truncated)");
+                Console.WriteLine("OfferId " + offerId(offer) + ": " + total.Value + " " + total.CurCode );
             }
         }
     } catch (Exception e)
@@ -87,4 +88,16 @@ using (new OperationContextScope(client.InnerChannel))
         Console.WriteLine(e);
     }
     Console.WriteLine("Service called!");
+}
+
+string offerId(HititNDCv201.OfferType offer)
+{
+    if (offer.OfferID.Length < 20) 
+    {
+        return offer.OfferID;
+    } else
+    {
+        return offer.OfferID.Substring(0,20) + "...(truncated)";
+
+    }
 }
