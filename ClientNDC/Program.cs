@@ -16,8 +16,8 @@ CraneNDCServiceClient client = new CraneNDCServiceClient(binding, new EndpointAd
 using (new OperationContextScope(client.InnerChannel))
 {
     HttpRequestMessageProperty prop = new HttpRequestMessageProperty();
-    prop.Headers["username"] = "OBILET";
-    prop.Headers["password"] = "Tkj@2023";
+    prop.Headers["username"] = "**username**";
+    prop.Headers["password"] = "**password**";
     OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = prop;
 
     HititNDCv201.doAirShoppingRequest request = new HititNDCv201.doAirShoppingRequest();
