@@ -8,8 +8,17 @@ using System.Threading.Channels;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
+const string USERNAME = "***your username***";
+const string PASSWORD = "***your password***";
+const string ENDPOINT = "https://book-htt.crane.aero/cranendc/v20.1/CraneNDCService";
+const string DEP_PORT = "SAW";
+const string ARR_PORT = "AMS";
+const string DEP_DATE = "2024-04-30";
+
+
+
 Console.WriteLine("Hello, World!");
-Uri uri = new Uri("https://book-htt.crane.aero/cranendc/v20.1/CraneNDCService");
+Uri uri = new Uri(ENDPOINT);
 var binding = new BasicHttpsBinding();
 binding.MaxReceivedMessageSize = 1000000;
 CraneNDCServiceClient client = new CraneNDCServiceClient(binding, new EndpointAddress(uri));
@@ -17,8 +26,8 @@ CraneNDCServiceClient client = new CraneNDCServiceClient(binding, new EndpointAd
 using (new OperationContextScope(client.InnerChannel))
 {
     HttpRequestMessageProperty prop = new HttpRequestMessageProperty();
-    prop.Headers["username"] = "**username**";
-    prop.Headers["password"] = "**password**";
+    prop.Headers["username"] = USERNAME;
+    prop.Headers["password"] = PASSWORD;
     OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] = prop;
 
     HititNDCv201.doAirShoppingRequest request = new HititNDCv201.doAirShoppingRequest();
@@ -29,17 +38,17 @@ using (new OperationContextScope(client.InnerChannel))
     request.Party = new PartyType1();
     request.Party.Sender = new SenderType1();
     var travelAgency = new HititNDCv201.TravelAgencyType1();
-    travelAgency.AgencyID = "OBILET";
+    travelAgency.AgencyID = USERNAME;
     request.Party.Sender.Item = travelAgency;
 
     request.Request = new RequestType1();
     request.Request.FlightRequest = new FlightRequestType();
     HititNDCv201.OriginDestCriteriaType odCriteria = new HititNDCv201.OriginDestCriteriaType();
     odCriteria.OriginDepCriteria = new OriginDepCriteriaType();
-    odCriteria.OriginDepCriteria.IATA_LocationCode = "SAW";
-    odCriteria.OriginDepCriteria.Date = DateTime.ParseExact("2024-01-26", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+    odCriteria.OriginDepCriteria.IATA_LocationCode = DEP_PORT;
+    odCriteria.OriginDepCriteria.Date = DateTime.ParseExact(DEP_DATE, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
     odCriteria.DestArrivalCriteria = new DestArrivalCriteriaType();
-    odCriteria.DestArrivalCriteria.IATA_LocationCode = "ESB";
+    odCriteria.DestArrivalCriteria.IATA_LocationCode = ARR_PORT;
     
     odCriteria.PreferredCabinType = new CabinTypeType[1];
     odCriteria.PreferredCabinType[0] = new CabinTypeType();
